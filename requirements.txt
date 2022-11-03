@@ -3,3 +3,4 @@ pandas==1.5.1
 opencv-python
 extcolors
 colormap
+easydev
