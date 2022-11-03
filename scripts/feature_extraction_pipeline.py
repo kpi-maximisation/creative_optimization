@@ -1,6 +1,9 @@
 import pandas as pd
 from colormap import rgb2hex
 import itertools 
+import cv2
+from typing import List, Tuple
+from matplotlib import pyplot as plt
 
 def color_to_df(input):
     colors_pre_list = str(input).replace('([(','').split(', (')[0:-1]
@@ -37,3 +40,33 @@ def convert_color_dict_to_pandas_df(game_id, sorted_color_dict):
     pd_dict['game_id'] = game_id
     # return pd_dict
     return pd.DataFrame(pd_dict,index=[0])
+
+
+def locate_image_on_image(locate_image: str, on_image: str, prefix: str = '', visualize: bool = False, color: Tuple[int, int, int] = (0, 0, 255)):
+    try:
+
+        image = cv2.imread(on_image)
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+        template = cv2.imread(locate_image, 0)
+
+        result = cv2.matchTemplate(gray, template, cv2.TM_CCOEFF)
+        _, _, _, max_loc = cv2.minMaxLoc(result)
+
+        height, width = template.shape[:2]
+
+        top_left = max_loc
+        bottom_right = (top_left[0] + width, top_left[1] + height)
+
+        if visualize:
+            cv2.rectangle(image, top_left, bottom_right, color, 1)
+            plt.figure(figsize=(10, 10))
+            plt.axis('off')
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            plt.imshow(image)
+
+        # return {f'{prefix}top_left_pos': top_left, f'{prefix}bottom_right_pos': bottom_right}
+        return height, width, top_left, bottom_right
+
+    except cv2.error as err:
+        print(err)
