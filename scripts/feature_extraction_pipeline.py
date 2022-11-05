@@ -5,6 +5,9 @@ import cv2
 from matplotlib import pyplot as plt
 from typing import List, Tuple
 
+from typing import List, Tuple
+from matplotlib import pyplot as plt
+
   
 def color_to_df(input):
     colors_pre_list = str(input).replace('([(','').split(', (')[0:-1]

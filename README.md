@@ -92,7 +92,7 @@
 
 ```bash
 git clone https://github.com/kpi-maximisation/creative_optimization.git
-cd Scalable-Backtesting-Infrastructure
+cd creative_optimization
 pip install -r requirements.txt
 python3 backend/app.py
 ```
@@ -100,8 +100,8 @@ python3 backend/app.py
 
 ## Frontend usage guide
 ```bash
-git clone https://github.com/kpi-maximisation/creative_optimization-Frontend.git
-cd Scalable-Backtesting-Infrastructure-Frontend
+git clone https://github.com/kpi-maximisation/creative_optimization-frontend.git
+cd creative_optimization-frontend
 npm install --legacy-peer-deps
 npm start
 ```
