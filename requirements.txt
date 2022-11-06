@@ -1,9 +1,12 @@
-pandas
 ffmpeg
 pyautogui
 selenium
-extcolors 
-colormap 
-matplotlib 
 pillow 
 easydev
+matplotlib==3.6.1
+pandas==1.5.1
+opencv-python
+extcolors
+colormap
+easydev
+streamlit
