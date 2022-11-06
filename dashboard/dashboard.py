@@ -55,6 +55,24 @@ perform when they are served.
     `*` **CTR** - Represents the click-through rate score of the creative
     """)
     st.write("")
+    with st.expander("Extracted Features"):
+        st.subheader("Extracted Features")
+        st.markdown("""
+            `*` **Logo and logo positions**\n
+            `*` **Objects from all screens**\n
+            `*` **Emotions for the human faces**\n
+            `*` **The transition time between click & engagement screen**\n
+            `*` **Text from all screens**\n
+            `*` **Audio Extraction**\n
+            `*` **Text transcription from extracted audio**\n
+            `*` **Sentiment analysis on the extracted texts**\n
+            `*` **Dominant colors**\n
+            `*` **The CTA button (Apply Now button in the figure above)**\n
+            `*` **Transcribed text from audio.**
+        """)
+
+
+    st.write("")
     st.subheader("Some Plots")
     getImages()
 
@@ -65,26 +83,53 @@ def getImages():
     st.image(image, caption='CTA Postions')
 
     with st.expander("Random Forest Result"):
+        st.subheader(" `*` Engagement Rate(ER)")
         st.write("""`*` Feature Importance""")
-        image = Image.open('./dashboard/dashboard_images/feature_importance.png')
+        image = Image.open('./dashboard/dashboard_images/all_features_RF_feature_importanceER.png')
         st.image(image, caption='Feature Importance')
 
         st.write("""`*` Prediction vs True Value""")
-        image = Image.open('./dashboard/dashboard_images/predictions.png')
+        image = Image.open('./dashboard/dashboard_images/all_features_RF_predictionsER.png')
+        st.image(image, caption='Predictions')
+
+        st.subheader("Click Through(CTR) Rate")
+        st.write("""`*` Feature Importance""")
+        image = Image.open('./dashboard/dashboard_images/all_features_RF_feature_importanceCTR.png')
+        st.image(image, caption='Feature Importance')
+
+        st.write("""`*` Prediction vs True Value""")
+        image = Image.open('./dashboard/dashboard_images/all_features_RF_predictionsCTR.png')
         st.image(image, caption='Predictions')
     
     with st.expander("Deep Learning Model Result"):
-        st.subheader("""`*` LSTM Results""")
+        st.subheader("""`*` Engagement Rate(ER)""")
+        st.write("""`*` Validation LOSS""")
+        image = Image.open('./dashboard/dashboard_images/val_loss_all_features.png')
+        st.image(image, caption='loss')
+
         st.write("""`*` LOSS""")
-        image = Image.open('./dashboard/dashboard_images/LSTM_loss.png')
+        image = Image.open('./dashboard/dashboard_images/all_features_loss.png')
         st.image(image, caption='loss')
 
         st.write("""`*` MEAN ABSOLUTE ERROR""")
-        image = Image.open('./dashboard/dashboard_images/MAE_LSTM.png')
+        image = Image.open('./dashboard/dashboard_images/all_features_MAE.png')
         st.image(image, caption='mae')
 
-        st.write("""`*` MEAN SQUARED ERROR""")
-        image = Image.open('./dashboard/dashboard_images/MSE_LSTM.png')
+        st.write("""`*` MEAN STANDARD ERROR""")
+        image = Image.open('./dashboard/dashboard_images/all_features_MSE.png')
+        st.image(image, caption='mse')
+
+        st.subheader("""`*` Click Through Rate(ER)""")
+        st.write("""`*` Validation LOSS""")
+        image = Image.open('./dashboard/dashboard_images/val_loss_all_features_CTR.png')
+        st.image(image, caption='loss')
+
+        st.write("""`*` LOSS""")
+        image = Image.open('./dashboard/dashboard_images/all_features_loss_CTR.png')
+        st.image(image, caption='loss')
+
+        st.write("""`*` MEAN STANDARD ERROR""")
+        image = Image.open('./dashboard/dashboard_images/all_features_MSE_CTR.png')
         st.image(image, caption='mse')
 
 
