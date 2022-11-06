@@ -15,7 +15,7 @@
 
 
 
-<img src="images/kpi_max.png" name="">
+<img src="images/dynamic_creative.png" name="">
 <br />
 <p align="center">
   <h3 align="center">Computer Vision for Creative Optimisation: KPI maximisation through image analysis</h3>
