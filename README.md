@@ -1,6 +1,5 @@
-# Dynamic Creative Optimization
-
-<h1 align="center">Computer Vision for Creative Optimisation: KPI maximisation through image analysis</h1>
+<h1 align="center"> Dynamic Creative Optimization </h1>
+<h3 align="center">Computer Vision for Creative Optimisation: KPI maximisation through image analysis</h3>
 <div>
 <a href="https://github.com/kpi-maximisation/creative_optimization/network/members"><img src="https://img.shields.io/github/forks/kpi-maximisation/creative_optimization" alt="Forks Badge"/></a>
 <a href="https://github.com/kpi-maximisation/creative_optimization/pulls"><img src="https://img.shields.io/github/issues-pr/kpi-maximisation/creative_optimization" alt="Pull Requests Badge"/></a>
