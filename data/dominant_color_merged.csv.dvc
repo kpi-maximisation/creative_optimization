@@ -1,0 +1,4 @@
+outs:
+- md5: e2864746ecb1ebe17080be45a1195e7a
+  size: 112404
+  path: dominant_color_merged.csv
