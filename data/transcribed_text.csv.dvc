@@ -1,0 +1,4 @@
+outs:
+- md5: da8e03363c65d05f777d76969fa689ee
+  size: 53872
+  path: transcribed_text.csv

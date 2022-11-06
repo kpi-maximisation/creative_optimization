@@ -1,0 +1,4 @@
+outs:
+- md5: 8451cea0d00323e1701af8c168cd6187
+  size: 54256
+  path: logo_position_concat.csv
