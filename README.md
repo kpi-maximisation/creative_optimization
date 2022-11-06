@@ -1,4 +1,4 @@
-# creative_optimization
+# Dynamic Creative Optimization
 
 <h1 align="center">Computer Vision for Creative Optimisation: KPI maximisation through image analysis</h1>
 <div>
