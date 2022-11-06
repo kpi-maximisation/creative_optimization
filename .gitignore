@@ -1,2 +1,9 @@
-data/
+data/*.csv
+data/*.zip
+data/audio
+data/end_frame
 new_data/
+data/images/
+data/start_frame/
+data/vid_cropped/
+data/video/
