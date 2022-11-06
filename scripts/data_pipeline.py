@@ -17,6 +17,6 @@ class pipeline:
         self.output_path = output_data
     
     def extract_assets(self, path):
-        
+        pass
         
     
