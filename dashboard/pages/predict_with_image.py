@@ -5,6 +5,10 @@ import cv2
 import sys,os
 import extcolors
 from colormap import rgb2hex
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import load_model
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
 from feature_extraction_pipeline import *
@@ -164,6 +168,7 @@ def applyButton():
                     df = df.drop(['game_id'], axis=1)
                     st.write("Generated csv file")
                     st.write(df)
+                    predict_result(df)
                 else:
                     st.error(message, icon="🚨")
             else:
@@ -234,3 +239,127 @@ def getCTALocation():
     except Exception as e:
         return False, str(e), None
 
+
+
+def predict_result(df):
+    df_1 = df.copy()
+    df_1['area'] = calc_area(df_1)
+    df_1['cta_position'] = encode_coordinates(df_1)
+    df_final = df_1.drop(["logo_start_x","logo_start_y","logo_end_x",
+        "logo_end_y", "logo_height","cta_start_x", "cta_start_y", "cta_end_x",
+        "cta_end_y","cta_height","cta_width","logo_width"],axis=1)
+
+    numerical_cols = get_numerical_columns(df_final)
+    categorical_cols = get_categorical_columns(df_final)
+
+    categorical_cols_encoded = label_encoder(df_final)
+
+    X=pd.DataFrame()
+    X = pd.concat([X, categorical_cols_encoded], axis=1)
+
+    scale_cols = scale_columns(X, X.columns.tolist(),range_tup=(-1,1))
+    scaled_data = change_datatypes(scale_cols)
+    predict_tensorflow(scaled_data)
+
+def predict_tensorflow(df):
+    model = load_model('./models/LSTM_sales 2022-11-06-01:47:47.pkl')
+    # df = df[['color_1', 'color_1_occurance', 'color_2', 'color_2_occurance',
+    #    'color_3', 'color_3_occurance', 'color_4', 'color_4_occurance',
+    #    'color_5', 'color_5_occurance', 'cta_position', 'area']]
+    df = np.asarray(df).astype(np.float32)
+    result = model.predict(df)
+    st.write(np.exp(result))
+
+
+def get_numerical_columns(df: pd.DataFrame) -> list:
+    numerical_columns = df.select_dtypes(include='number').columns.tolist()
+    return numerical_columns
+
+def get_categorical_columns(df: pd.DataFrame) -> list:
+    categorical_columns = df.select_dtypes(
+        include=['object']).columns.tolist()
+    return categorical_columns
+
+def label_encoder(x):
+    lb = LabelEncoder()
+    cat_cols = get_categorical_columns(x)
+    for col in cat_cols:
+        x[col] = lb.fit_transform(x[col])
+
+    return x
+
+
+def change_datatypes(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    A simple function which changes the data types of the dataframe and returns it
+    """
+    try:
+        data_types = dataframe.dtypes
+        changes = ['float64', 'int64']
+        for col in data_types.index:
+            if(data_types[col] in changes):
+                if(data_types[col] == 'float64'):
+                    dataframe[col] = pd.to_numeric(
+                        dataframe[col], downcast='float')
+                elif(data_types[col] == 'int64'):
+                    dataframe[col] = pd.to_numeric(
+                        dataframe[col], downcast='unsigned')     
+    except Exception as e:
+        print(e)
+
+    return dataframe
+
+def return_position_val(x,y):
+    if x < 300 and y < 300:
+        return "top_left"
+    elif x < 300 and y < 600:
+        return "center_left"
+    elif x < 300 and y < 900:
+        return "bottom_left"
+    elif x < 600 and y < 300:
+        return "top_center"
+    elif x < 600 and y < 600:
+        return "center"
+    elif x < 600 and y < 900:
+        return "bottom_center"
+    elif x < 940 and y < 300:
+        return "top_right"
+    elif x < 940 and y < 600:
+        return "top_center"
+    else: return "bottom_right"
+
+def encode_coordinates(df):
+    encoded_val = []
+    for i,row in df.iterrows():
+        encoded_val.append(return_position_val(row['cta_start_x'],row['cta_start_y']))
+    return encoded_val
+
+def calc_area(df):
+    area = []
+    for i,row in df.iterrows():
+        area.append(row['cta_width']*row['cta_height'])
+    return area
+
+def scale_column(df, column: str, range_tup: tuple = (0, 1)) -> pd.DataFrame:
+    """
+        Returns the objects DataFrames column normalized using Normalizer
+        Parameters
+    """
+    try:
+        std_column_df = pd.DataFrame(df[column])
+        std_column_values = std_column_df.values
+        minmax_scaler = MinMaxScaler(feature_range=range_tup)
+        normalized_data = minmax_scaler.fit_transform(std_column_values)
+        df[column] = normalized_data
+        return df
+    except Exception as e:
+        print(f"scale_column----->{e}")
+
+
+def scale_columns(df, columns: list, range_tup: tuple = (0, 1)) -> pd.DataFrame:
+    try:
+        for col in columns:
+            df = scale_column(df, col, range_tup)
+        return df
+    except Exception as e:
+        return None

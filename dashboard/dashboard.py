@@ -54,6 +54,38 @@ perform when they are served.
     `*` **ER** - Represents the engagement rate score of the creative\n
     `*` **CTR** - Represents the click-through rate score of the creative
     """)
+    st.write("")
+    st.subheader("Some Plots")
+    getImages()
+
+
+def getImages():
+    st.write("")
+    image = Image.open('./dashboard/dashboard_images/cta_positions.png')
+    st.image(image, caption='CTA Postions')
+
+    with st.expander("Random Forest Result"):
+        st.write("""`*` Feature Importance""")
+        image = Image.open('./dashboard/dashboard_images/feature_importance.png')
+        st.image(image, caption='Feature Importance')
+
+        st.write("""`*` Prediction vs True Value""")
+        image = Image.open('./dashboard/dashboard_images/predictions.png')
+        st.image(image, caption='Predictions')
+    
+    with st.expander("Deep Learning Model Result"):
+        st.subheader("""`*` LSTM Results""")
+        st.write("""`*` LOSS""")
+        image = Image.open('./dashboard/dashboard_images/LSTM_loss.png')
+        st.image(image, caption='loss')
+
+        st.write("""`*` MEAN ABSOLUTE ERROR""")
+        image = Image.open('./dashboard/dashboard_images/MAE_LSTM.png')
+        st.image(image, caption='mae')
+
+        st.write("""`*` MEAN SQUARED ERROR""")
+        image = Image.open('./dashboard/dashboard_images/MSE_LSTM.png')
+        st.image(image, caption='mse')
 
 
 def PredictUsingImage():

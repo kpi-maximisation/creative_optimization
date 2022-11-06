@@ -5,6 +5,7 @@ import time
 import cv2
 import extcolors
 from colormap import rgb2hex
+from pages.predict_with_image import predict_result
 
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
 from feature_extraction_pipeline import *
@@ -95,6 +96,7 @@ def applyButton():
                         df = df.drop(['game_id'], axis=1)
                         st.write("Generated csv file")
                         st.write(df)
+                        # predict_result(df)
                     else:
                         st.error(message, icon="🚨")
                 else:
