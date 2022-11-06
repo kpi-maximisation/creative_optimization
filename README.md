@@ -1,12 +1,15 @@
 <h1 align="center"> Dynamic Creative Optimization </h1>
 <h3 align="center">Computer Vision for Creative Optimisation: KPI maximisation through image analysis</h3>
-<div>
+
+<div align="center">
 <a href="https://github.com/kpi-maximisation/creative_optimization/network/members"><img src="https://img.shields.io/github/forks/kpi-maximisation/creative_optimization" alt="Forks Badge"/></a>
 <a href="https://github.com/kpi-maximisation/creative_optimization/pulls"><img src="https://img.shields.io/github/issues-pr/kpi-maximisation/creative_optimization" alt="Pull Requests Badge"/></a>
 <a href="https://github.com/kpi-maximisation/creative_optimization/issues"><img src="https://img.shields.io/github/issues/kpi-maximisation/creative_optimization" alt="Issues Badge"/></a>
 <a href="https://github.com/kpi-maximisation/creative_optimization/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/kpi-maximisation/creative_optimization?color=2b9348"></a>
 <a href="https://github.com/kpi-maximisation/creative_optimization/blob/main/LICENSE"><img src="https://img.shields.io/github/license/kpi-maximisation/creative_optimization?color=2b9348" alt="License Badge"/></a>
 </div>
+</br>
+
 
 
 </br>
