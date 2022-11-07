@@ -154,22 +154,22 @@ class creativeFrameExtractor:
         center = (ad_size[0]/2, self.browser_edges[0]+(ad_size[1]/2))
 
         if self.engagement_type == "tap":
-            pyautogui.moveTo(center[0], center[1], duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
             pyautogui.leftClick()
         elif self.engagement_type == "swipe right":
-            pyautogui.moveTo(center[0], center[1], duration=1)
-            pyautogui.dragRel(center[0], 0, duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
+            pyautogui.dragRel(center[0], 0, duration=0.2)
         elif self.engagement_type == "swipe left" or self.engagement_type == 'swipe':
-            pyautogui.moveTo(center[0], center[1], duration=1)
-            pyautogui.dragRel(-center[0], 0, duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
+            pyautogui.dragRel(-center[0], 0, duration=0.2)
         elif self.engagement_type == "swipe down":
-            pyautogui.moveTo(center[0], center[1], duration=1)
-            pyautogui.dragRel(0, center[1], duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
+            pyautogui.dragRel(0, center[1], duration=0.2)
         elif self.engagement_type == "swipe up":
-            pyautogui.moveTo(center[0], center[1], duration=1)
-            pyautogui.dragRel(0, -center[1], duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
+            pyautogui.dragRel(0, -center[1], duration=0.2)
         elif self.engagement_type == "tap and hold":
-            pyautogui.moveTo(center[0], center[1], duration=1)
+            pyautogui.moveTo(center[0], center[1], duration=0.2)
             pyautogui.click()
         elif self.engagement_type == "scrub":
             pyautogui.moveTo(center[0] - (1/2 * center[0]),
@@ -181,7 +181,7 @@ class creativeFrameExtractor:
             pyautogui.dragRel(-center[0], (1/3 * center[1]), duration=0.2)
             pyautogui.dragRel(center[0], 0, duration=0.2)
 
-    def generate_preview_video(self, links: list, bad: list) -> None:
+    def generate_preview_video_and_frames(self, links: list, output_path: str, bad: list = []) -> None:
         '''
         Function to generate preview video and also a cropped version of the video
         '''
@@ -211,7 +211,7 @@ class creativeFrameExtractor:
                 # Capture start frame
                 canvas.screenshot(
                     path.join(
-                        '../start_frame/',  f'{file_name}_start_frame.png')
+                        output_path,  'start_frame.png')
                 )
                 self.logger.info(
                     f'start frame extracted for game id: {file_name}')
@@ -240,7 +240,7 @@ class creativeFrameExtractor:
             try:
                 # get engagement type
                 self.engagement_type = get_instruction(
-                    '../start_frame/' + f'{file_name}_start_frame.png')
+                   output_path + 'start_frame.png')
 
                 print("Engagement Chosen:" + self.engagement_type)
                 self.logger.info(
@@ -250,7 +250,7 @@ class creativeFrameExtractor:
 
                 # canvas = driver.find_element(By.TAG_NAME, "canvas")
 
-                cmd = f" ffmpeg -hide_banner -loglevel error -f alsa -ac 2 -i pulse -video_size 1920x1080 -framerate 60 -f x11grab -i :1 -c:v libx264rgb -qp 0 -preset ultrafast ../video/{file_name}.mkv -y"
+                cmd = f" ffmpeg -hide_banner -loglevel error -f alsa -ac 2 -i pulse -video_size 1920x1080 -framerate 60 -f x11grab -i :1 -c:v libx264rgb -qp 0 -preset ultrafast {output_path}raw_video.mkv -y"
 
                 # start recording the entire screen
                 video_recording = Popen(
@@ -285,7 +285,7 @@ class creativeFrameExtractor:
                 # take screenshots
                 canvas.screenshot(
                     path.join(
-                        '../end_frame/' + f'{file_name}_end_frame.png')
+                       output_path + 'end_frame.png')
                 )
                 print('End frame Captured')
 
@@ -413,21 +413,21 @@ class creativeFrameExtractor:
             print(f"Ad-Unit Failed to load: {self.preview_url}")
             driver.close()
 
+def run():
+    # use the script
+    url = "https://s3.us-west-1.amazonaws.com/a.futureadlabs.com-us-west-1-backup/us-west-1/games/adunit-lionsgate-spiral-puzzle-v2-mpu/47ab0df166aaa7d1650f/index.html"
+    ext = creativeFrameExtractor(url, save_location='./extracted/')
+    bad = pd.read_csv('./url_not_working.csv')
+    bad_url = bad.url_not_working
+    processed = pd.read_csv('./processed.csv')
+    link_processed = processed.processed
 
-# use the script
-url = "https://s3.us-west-1.amazonaws.com/a.futureadlabs.com-us-west-1-backup/us-west-1/games/adunit-lionsgate-spiral-puzzle-v2-mpu/47ab0df166aaa7d1650f/index.html"
-ext = creativeFrameExtractor(url, save_location='./extracted/')
-bad = pd.read_csv('./url_not_working.csv')
-bad_url = bad.url_not_working
-processed = pd.read_csv('./processed.csv')
-link_processed = processed.processed
+    new_link = list(set(bad_url)) + list(set(link_processed))
 
-new_link = list(set(bad_url)) + list(set(link_processed))
+    df = pd.read_csv("../data/performance_data.csv")
+    links = df.preview_link
+    # links = ['https://s3.us-west-1.amazonaws.com/a.futureadlabs.com-us-west-1-backup/us-west-1/games/adunit-western-union-sensory-unit-swipe-right-tap-mpu/571dd7229502e37d0b08/index.html']
 
-df = pd.read_csv("../data/performance_data.csv")
-links = df.preview_link
-# links = ['https://s3.us-west-1.amazonaws.com/a.futureadlabs.com-us-west-1-backup/us-west-1/games/adunit-western-union-sensory-unit-swipe-right-tap-mpu/571dd7229502e37d0b08/index.html']
-
-links = list(set(links) -set(new_link))
-print(f'remaining: {len(links)}')
-ext.generate_preview_video(links, bad_url)
+    links = list(set(links) -set(new_link))
+    print(f'remaining: {len(links)}')
+    ext.generate_preview_video_and_frames(links, bad_url)

@@ -1,6 +1,7 @@
 import streamlit as st
 from pages.predict_with_image import *
 from pages.predict_with_video import *
+from pages.all_steps import *
 
 st.set_page_config(page_title="Dashboard", layout="wide")
 
@@ -142,11 +143,17 @@ def PredictUsingVideo():
     st.title("Predict Using Creative AD Video")
     setPredictVideoTitle()
 
+def PredictUsingLink():
+    st.sidebar.markdown("# Predict KPI Using Creative AD ❄️")
+    st.title("Predict Using Creative AD URL Link")
+    setPredictLinkTitle()
+
 
 page_names_to_funcs = {
     "Overview": mainPage,
     "Predict Using Image": PredictUsingImage,
     "Predict Using Video": PredictUsingVideo,
+    "Predict Using Link" : PredictUsingLink,
 } 
 
 selected_page = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())
