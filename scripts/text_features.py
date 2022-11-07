@@ -40,11 +40,12 @@ def sentiment(text):
 def text_features(text, game_id):
     audio_dict = {}
     audio_dict['game_id'] = game_id
-    audio_dict['clean_text'] = preprocess_first(text)
-    audio_dict['sentiment_score'] = sentiment(audio_dict['clean_text'])
+    audio_dict['text'] = text
+    # audio_dict['clean_text'] = preprocess_first(text)
+    audio_dict['sentiment_score'] = sentiment(audio_dict['text'])
     score = audio_dict['sentiment_score']
     audio_dict['sentiment'] =  np.select([score<0, score==0, score>0],['negative','neutral','positive'])
-    audio_dict['word_count'] = str(len(audio_dict['clean_text'].split()))
+    audio_dict['word_count'] = str(len(audio_dict['text'].split()))
 
     df_text = pd.DataFrame.from_dict([audio_dict])
     return df_text

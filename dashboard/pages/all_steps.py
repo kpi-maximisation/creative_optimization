@@ -13,10 +13,9 @@ from colormap import rgb2hex
 import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
-from feature_extraction_pipeline import *
 is_all_upload = 0
 from data_pipeline import pipeline
-
+from feature_extraction_pipeline import *
 data_pipe = pipeline(save_location='./dashboard/extracted_assets/')
 
 
@@ -52,6 +51,9 @@ def extractAssetsFromLandingPage():
         dict_all["audio_path"] = vals[4]
         dict_all['df_all'] = vals[5]
         
+        
+        
+        
         display_extract_result(dict_all)
         
         return True, "Success"
@@ -72,21 +74,24 @@ def applyButton():
 
 def display_extract_result(dict_all):
     st.write("Extracted Images: ")
-    beg_image = Image.open(dict_all['start_frame'])
-    st.image(beg_image, caption='Landing Page')
+    col1, col2 = st.columns(2)
+    with col1:
+        st.header("Landing Page")
+        beg_image = Image.open(dict_all['start_frame'])
+        st.image(beg_image, caption='Landing Page')
+    with col2:
+        st.header("Ending Frame")
+        end_image = Image.open(dict_all['end_frame'])
+        st.image(end_image, caption='End Frame')
     
-    end_image = Image.open(dict_all['end_frame'])
-    st.image(end_image, caption='End Frame')
-    
-    st.write("Extracted Video: ")
-    video_file = open(dict_all['raw_vid_path'], 'rb')
-    video_bytes = video_file.read()
-    st.video(video_bytes)
-    
-    st.write("Cropped Video: ")
-    video_file_2 = open(dict_all['cropped_vid_path'], 'rb')
-    video_bytes_2 = video_file_2.read()
-    st.video(video_bytes_2)
+    col1_a, col2_a = st.columns(2)
+    with col1_a:
+        st.header("Cropped Video")
+        video_file_2 = open(dict_all['cropped_vid_path'], 'rb')
+        video_bytes_2 = video_file_2.read()
+        st.video(video_bytes_2)
+    with col2_a:
+        st.write('')
     
     
     st.write("Extracted Audio: ")
@@ -97,4 +102,3 @@ def display_extract_result(dict_all):
     st.write("Extracted Dataframe: ")
     df = pd.read_csv(dict_all['df_all'])
     st.dataframe(df)  
-    
