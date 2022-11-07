@@ -62,9 +62,7 @@ def extractAssetsFromLandingPage():
     
     else:
         return False, "Unable to extract Assets, try again with different creative", None
-    # except Exception as e:
-    #     st.write("not working")
-    #     return False, str(e), None
+
 
 
 
@@ -108,8 +106,8 @@ def display_extract_result(dict_all):
     r1, r2 = predict_tensorflow(df)
     
     st.header('Prediction')
-    st.write(f'Engagement Rate: {r1.flatten()}' )
-    st.write(f'CTR: {r2.flatten()}' )
+    st.write(f'Engagement Rate: {r1.flatten()[0]}' )
+    st.write(f'CTR: {r2.flatten()[0]}' )
 
 
 def predict_tensorflow(df):
@@ -118,12 +116,11 @@ def predict_tensorflow(df):
     
     model1 = load_model('./models/LSTM_ER 2022-11-06-16:49:54.pkl')
     model2 = load_model('./models/LSTM_CTR 2022-11-06-18:22:55.pkl')
-     # df = df[['color_1', 'color_1_occurance', 'color_2', 'color_2_occurance',
-    #    'color_3', 'color_3_occurance', 'color_4', 'color_4_occurance',
-    #    'color_5', 'color_5_occurance', 'cta_position', 'area']]
+    
     df_astype = np.asarray(df_new).astype(np.float32)
     result1 = model1.predict(df_astype)
     result2 = model2.predict(df_astype)
+    st.write("Result Generated!")
     return result1, result2
 
 
@@ -135,7 +132,6 @@ def encode_df(df):
         df[col+'_l_encoded'] = le.fit_transform(df[col])
 
     df.drop(columns=non_numericals, axis=1, inplace=True)
-    # df[['sentiment_a']] = pd.get_dummies(df['sentiment'], columns=['sentiment'] , drop_first=True).values
     df[['sentiment_a']] = 1
     df[['sentiment_b']] = 0
     

@@ -54,11 +54,13 @@ class pipeline:
         # extract the assets from the Creative Ad URL
         ext.generate_preview_video_and_frames(
             [self.input_link], output_path=self.output_path_ext)
-        print("Extraction complete")
+        print("Extraction complete!!")
 
         
 
         self.preprocess()
+        
+        
 
         extraction_paths = [f'{self.output_path_ext}start_frame.png',
                             f'{self.output_path_ext}end_frame.png',
@@ -119,7 +121,7 @@ class pipeline:
         # Audio Features: Sentiment and word count
         df_text = text_features(text, self.game_id)
         # df_text.drop(columns=['clean_text'], inplace=True)
-
+        print("merge dataframes:")
         df_all = df_audio.merge(df_emotion, on='game_id', how='inner')
         df_all = df_all.merge(df_text, on='game_id', how='inner')
         df_all = df_all.merge(df_merged, on='game_id', how='inner')
@@ -161,13 +163,11 @@ def getDominantColors(dir_path, game_id):
         final_dict = return_sorted_dominant_colors(color_dict)
         return True, "Success", final_dict
     except Exception as e:
-        print(e)
         return False, str(e), None
 
 
 def getCTALocation(path, game_id):
     dict_cta = {}
-    print("GET CTA:" + path)
     try:
         vals = locate_image_on_image(
             "./dashboard/dashboard_images/cta.png", f"{path}end_frame.png")
