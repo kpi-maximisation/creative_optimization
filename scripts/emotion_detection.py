@@ -11,7 +11,7 @@ df_all = pd.read_csv('../data/performance_data.csv')
 
 import numpy as np
 
-def get_emotion_values(names):
+def get_emotion_values(names, game_id):
     df_emotion = pd.DataFrame(columns=['game_id', 'beg_frame_angry', 'beg_frame_disgust', 'beg_frame_fear',
        'beg_frame_happy', 'beg_frame_sad', 'beg_frame_surprise',
        'beg_frame_neutral', 'end_frame_angry', 'end_frame_disgust',
@@ -42,8 +42,8 @@ def get_emotion_values(names):
       
       
       # for beginning frame
-      if os.path.isfile('../start_frame/' + name + '_start_frame.png'): 
-          image_path= '../start_frame/' + name + '_start_frame.png'
+      if os.path.isfile(name + 'start_frame.png'): 
+          image_path= name + 'start_frame.png'
           img = cv2.imread(image_path)
           predictions = DeepFace.analyze(img, enforce_detection=False, actions = ['age', 'emotion'])
           total_prediction['beg_frame_angry']=predictions['emotion']['angry']
@@ -59,8 +59,8 @@ def get_emotion_values(names):
 
       # for ending frame
 
-      if os.path.isfile('../end_frame/' + name + '_end_frame.png'): 
-          image_path= '../end_frame/' + name + '_end_frame.png'
+      if os.path.isfile(name + 'end_frame.png'): 
+          image_path= name + 'end_frame.png'
           img = cv2.imread(image_path)
           predictions = DeepFace.analyze(img, enforce_detection=False, actions = ['age', 'emotion'])
           total_prediction['end_frame_angry']=predictions['emotion']['angry']
@@ -73,7 +73,7 @@ def get_emotion_values(names):
           total_prediction['end_frame_age']=predictions['age']
       else:
           print(f"-----------\n FILE NOT FOUND:{name}")
-      total_prediction['game_id'] = name
+      total_prediction['game_id'] = game_id
 
       df = pd.DataFrame.from_dict([total_prediction])
       df_emotion = pd.concat([df,df_emotion],ignore_index=True)
@@ -82,8 +82,9 @@ def get_emotion_values(names):
     return df_emotion
 
 
-
-names = df_all.game_id
-df_emotions = get_emotion_values(names)
-
-df_emotions.to_csv('../data/emotion_features.csv',index=False)
+def run():
+    names = df_all.game_id
+    df_emotions = get_emotion_values(names)
+    
+    # return df_emotions
+    df_emotions.to_csv('../data/emotion_features.csv',index=False)

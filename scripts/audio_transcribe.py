@@ -3,7 +3,7 @@ import pandas as pd
 
 model = whisper.load_model("base")
 
-def get_text(audio_path):
+def get_text_default(audio_path):
 
     # load audio and pad/trim it to fit 30 seconds
     audio = whisper.load_audio(audio_path)
@@ -14,7 +14,7 @@ def get_text(audio_path):
 
     # detect the spoken language
     _, probs = model.detect_language(mel)
-    print(f"Detected language: {max(probs, key=probs.get)}")
+    # print(f"Detected language: {max(probs, key=probs.get)}")
 
     # decode the audio
     options = whisper.DecodingOptions()
@@ -22,6 +22,10 @@ def get_text(audio_path):
 
     # print the recognized text
     print(result.text)
+def get_text(audio_path):
+    result = model.transcribe(audio_path)
+    return result['text']
 
-result = model.transcribe('../audio/92a1ef3b78f2b21068f8e1da4025e239.mp3')
-print(result['text'])
+def run():
+    result = model.transcribe('../audio/92a1ef3b78f2b21068f8e1da4025e239.mp3')
+    print(result['text'])

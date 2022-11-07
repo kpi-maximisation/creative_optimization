@@ -2356,3 +2356,5 @@
 2022-11-05 11:51:34,877 : INFO : log_supp : Engagement type tap chosen for game id: b34d551e23ad7ce5a494453bcc409ccc
 2022-11-05 11:51:42,851 : INFO : log_supp : start frame extracted for game id: 258bf2e1c0ff55be0762ccab1c5b18db
 2022-11-05 11:51:45,478 : INFO : log_supp : Engagement type tap chosen for game id: 258bf2e1c0ff55be0762ccab1c5b18db
+2022-11-06 23:06:07,777 : INFO : log_supp : start frame extracted for game id: bb631902fce625cf0dc87d80c027c905
+2022-11-06 23:06:10,580 : INFO : log_supp : Engagement type tap_try chosen for game id: bb631902fce625cf0dc87d80c027c905
