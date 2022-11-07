@@ -1,22 +1,7 @@
-from pytesseract import pytesseract
-import re
 import os
-import signal
-import ffmpeg
-import pyautogui
 import subprocess
 from subprocess import Popen, call
 from os import path
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
-import time
-from time import sleep
-from typing import Tuple
-from data_pipeline import pipeline
 import streamlit as st
 from PIL import Image
 import pandas as pd
@@ -25,14 +10,12 @@ import sys
 import os
 import extcolors
 from colormap import rgb2hex
-from sklearn.preprocessing import MinMaxScaler
-from tensorflow.keras.models import load_model
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
-is_all_upload = 0
 from feature_extraction_pipeline import *
+is_all_upload = 0
+from data_pipeline import pipeline
 
 data_pipe = pipeline(save_location='./dashboard/extracted_assets/')
 
@@ -60,13 +43,19 @@ def extractAssetsFromLandingPage():
     st.write('running process')
     # try:
     vals = data_pipe.extract_assets(input_link = st.session_state['url'])
-    st.write(vals)
+
     if vals is not None:
-        # dict_all["csv_path"] = vals[0]
-        dict_all["img_start_path"] = vals[0]
-        dict_all["img_end_path"] = vals[1]
-        dict_all["vid_path"] = vals[2]
-        return True, "Success", dict_all
+        dict_all["start_frame"] = vals[0]
+        dict_all["end_frame"] = vals[1]
+        dict_all["raw_vid_path"] = vals[2]
+        dict_all["cropped_vid_path"] = vals[3]
+        dict_all["audio_path"] = vals[4]
+        dict_all['df_all'] = vals[5]
+        
+        display_extract_result(dict_all)
+        
+        return True, "Success"
+    
     else:
         return False, "Unable to extract Assets, try again with different creative", None
     # except Exception as e:
@@ -79,4 +68,33 @@ def applyButton():
     is_disabled = st.session_state['urlset'] == 1
 
     if st.button('Predict', disabled=not is_disabled):
-        img1, img2, video = extractAssetsFromLandingPage()
+        a, b = extractAssetsFromLandingPage()
+
+def display_extract_result(dict_all):
+    st.write("Extracted Images: ")
+    beg_image = Image.open(dict_all['start_frame'])
+    st.image(beg_image, caption='Landing Page')
+    
+    end_image = Image.open(dict_all['end_frame'])
+    st.image(end_image, caption='End Frame')
+    
+    st.write("Extracted Video: ")
+    video_file = open(dict_all['raw_vid_path'], 'rb')
+    video_bytes = video_file.read()
+    st.video(video_bytes)
+    
+    st.write("Cropped Video: ")
+    video_file_2 = open(dict_all['cropped_vid_path'], 'rb')
+    video_bytes_2 = video_file_2.read()
+    st.video(video_bytes_2)
+    
+    
+    st.write("Extracted Audio: ")
+    audio_file = open(dict_all['audio_path'], 'rb')
+    audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format='audio/mp3')
+    
+    st.write("Extracted Dataframe: ")
+    df = pd.read_csv(dict_all['df_all'])
+    st.dataframe(df)  
+    

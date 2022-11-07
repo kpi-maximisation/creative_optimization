@@ -35,12 +35,10 @@ class pipeline:
             os.makedirs(self.output_path_ext)
 
         # extract the assets from the Creative Ad URL
-        try:
-            ext.generate_preview_video_and_frames(
+        ext.generate_preview_video_and_frames(
                 [self.input_link], output_path=self.output_path_ext)
-            print("Extraction complete")
-        except e:
-            print("ERROR: Creative Ad Not Extracted")
+        print("Extraction complete")
+        
 
         self.preprocess()
         
@@ -48,8 +46,9 @@ class pipeline:
                             f'{self.output_path_ext}end_frame.png',
                             f'{self.output_path_ext}raw_video.mkv',
                             f'{self.output_path_ext}raw_video_cropped.mkv',
-                            f'{self.output_path_ext}audio.mkv'
-                            f'{self.output_path_ext}df_all.csv'
+                            f'{self.output_path_ext}audio.mp3', 
+                            f'{self.output_path_ext}df_final.csv', 
+                            
                             ]
 
         return extraction_paths
@@ -89,10 +88,11 @@ class pipeline:
         print("get_text_features:")
         # Audio Features: Sentiment and word count
         df_text = text_features(text, self.game_id)
-        df_text.drop(columns=['clean_text'], inplace=True)
+        # df_text.drop(columns=['clean_text'], inplace=True)
         
         df_all = df_audio.merge(df_emotion, on='game_id', how='inner')
         df_all = df_all.merge(df_text, on='game_id', how='inner')
-        df_all.to_csv(self.output_path + 'df_final.csv', index=False)
+        df_all.to_csv(self.output_path_ext + 'df_final.csv', index=False)
+
         
         
