@@ -59,13 +59,12 @@ perform when they are served.
         st.subheader("Extracted Features")
         st.markdown("""
             `*` **Logo and logo positions**\n
-            `*` **Objects from all screens**\n
             `*` **Emotions for the human faces**\n
             `*` **The transition time between click & engagement screen**\n
-            `*` **Text from all screens**\n
             `*` **Audio Extraction**\n
             `*` **Text transcription from extracted audio**\n
             `*` **Sentiment analysis on the extracted texts**\n
+            `*` **Word count (from transcribed text)**\n
             `*` **Dominant colors**\n
             `*` **The CTA button (Apply Now button in the figure above)**\n
             `*` **Transcribed text from audio.**
