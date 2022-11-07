@@ -262,10 +262,11 @@ def predict_result(df):
     predict_tensorflow(scaled_data)
 
 def predict_tensorflow(df):
+
     
     model1 = load_model('./models/LSTM_ER\ 2022-11-06-16:49:54.pkl')
     model2 = load_model('./models/LSTM_CTR\ 2022-11-06-18:22:55.pkl')
-     # df = df[['color_1', 'color_1_occurance', 'color_2', 'color_2_occurance',
+
     #    'color_3', 'color_3_occurance', 'color_4', 'color_4_occurance',
     #    'color_5', 'color_5_occurance', 'cta_position', 'area']]
     df = np.asarray(df).astype(np.float32)
