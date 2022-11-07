@@ -11,6 +11,8 @@ import os
 import extcolors
 from colormap import rgb2hex
 import numpy as np
+from tensorflow.keras.models import load_model
+from sklearn.preprocessing import LabelEncoder
 
 sys.path.append(os.path.abspath(os.path.join('./scripts')))
 is_all_upload = 0
@@ -102,3 +104,59 @@ def display_extract_result(dict_all):
     st.write("Extracted Dataframe: ")
     df = pd.read_csv(dict_all['df_all'])
     st.dataframe(df)  
+    
+    r1, r2 = predict_tensorflow(df)
+    
+    st.header('Prediction')
+    st.write(f'Engagement Rate: {r1.flatten()}' )
+    st.write(f'CTR: {r2.flatten()}' )
+
+
+def predict_tensorflow(df):
+    df.drop(columns=['game_id', 'text'], inplace=True)
+    df_new = encode_df(df)
+    
+    model1 = load_model('./models/LSTM_ER 2022-11-06-16:49:54.pkl')
+    model2 = load_model('./models/LSTM_CTR 2022-11-06-18:22:55.pkl')
+     # df = df[['color_1', 'color_1_occurance', 'color_2', 'color_2_occurance',
+    #    'color_3', 'color_3_occurance', 'color_4', 'color_4_occurance',
+    #    'color_5', 'color_5_occurance', 'cta_position', 'area']]
+    df_astype = np.asarray(df_new).astype(np.float32)
+    result1 = model1.predict(df_astype)
+    result2 = model2.predict(df_astype)
+    return result1, result2
+
+
+def encode_df(df):
+    # label encode 
+    non_numericals = ['color_3', 'color_2', 'color_4', 'color_5', 'color_1','sentiment']
+    le = LabelEncoder()
+    for col in non_numericals:
+        df[col+'_l_encoded'] = le.fit_transform(df[col])
+
+    df.drop(columns=non_numericals, axis=1, inplace=True)
+    # df[['sentiment_a']] = pd.get_dummies(df['sentiment'], columns=['sentiment'] , drop_first=True).values
+    df[['sentiment_a']] = 1
+    df[['sentiment_b']] = 0
+    
+    return df
+
+def change_datatypes(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    A simple function which changes the data types of the dataframe and returns it
+    """
+    try:
+        data_types = dataframe.dtypes
+        changes = ['float64', 'int64']
+        for col in data_types.index:
+            if(data_types[col] in changes):
+                if(data_types[col] == 'float64'):
+                    dataframe[col] = pd.to_numeric(
+                        dataframe[col], downcast='float')
+                elif(data_types[col] == 'int64'):
+                    dataframe[col] = pd.to_numeric(
+                        dataframe[col], downcast='unsigned')     
+    except Exception as e:
+        print(e)
+
+    return dataframe
