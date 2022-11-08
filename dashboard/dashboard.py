@@ -29,11 +29,11 @@ corresponding campaigns.
     st.write("")
     st.header("About the client")
     st.markdown("""
-    `*`Your client this week is **Adludio** - an online mobile ad business. Adludio
+    `*`Your client this week is **Adka** - an online mobile ad business. Adka
 provides the following service to its clients
     """)
     st.markdown("""
-   `*` Adludio has been running a vast number of advertisements and each
+   `*` Adka has been running a vast number of advertisements and each
 advertisement has its own Creative. These creatives were made based on the
 experience of designers and company needs. As a result, there is no way of
 evaluating creatives during production and knowing how well they might
