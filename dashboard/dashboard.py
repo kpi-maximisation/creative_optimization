@@ -61,14 +61,13 @@ perform when they are served.
         st.markdown("""
             `*` **Logo and logo positions**\n
             `*` **Emotions for the human faces**\n
-            `*` **The transition time between click & engagement screen**\n
-            `*` **Audio Extraction**\n
+            `*` **Audio and Audio Features**\n
             `*` **Text transcription from extracted audio**\n
             `*` **Sentiment analysis on the extracted texts**\n
             `*` **Word count (from transcribed text)**\n
             `*` **Dominant colors**\n
             `*` **The CTA button (Apply Now button in the figure above)**\n
-            `*` **Transcribed text from audio.**
+            
         """)
 
 
