@@ -114,7 +114,7 @@ npm start
 ## Getting Started
 
 ## Articles
-- [Medium Article](https://medium.com/)
+- [Medium Article](https://medium.com/dev-genius/dynamic-creative-optimization-27dd237cb89)
 
 ### Prerequisites
 
